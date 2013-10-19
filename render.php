@@ -1,8 +1,10 @@
 <?php
 date_default_timezone_set('Europe/London');
 
+// Replace them with the exact course names from http://cs.ox.ac.uk/teaching/MSCinCS/
 $courses = array('Machine Learning', 'Computer Security', 'Probabilistic Model Checking');
 
+// Replace them with the days and times of your classes and practicals from minerva
 $tutorials['Class']['Computer Security'] = array('day' => 'Tuesday', 'time' => '12');
 $tutorials['Class']['Machine Learning'] = array('day' => 'Wednesday', 'time' => '12');
 $tutorials['Class']['Probabilistic Model Checking'] = array('day' => 'Wednesday', 'time' => '15');
@@ -18,6 +20,7 @@ $vcalendarAll = new vcalendar($configAll);
 $vcalendarAll -> setProperty("X-WR-CALNAME", 'MSc Timetable');
 $vcalendarAll -> setProperty("X-WR-TIMEZONE", 'Europe/London');
 
+// Get the 3 feeds from the dept
 $config['Lecture'] = array("unique_id" => "Timetable-Lecture", "url" => "http://www.cs.ox.ac.uk/feeds/Timetable-Lecture.ics");
 $config['Class'] = array("unique_id" => "Timetable-Class", "url" => "http://www.cs.ox.ac.uk/feeds/Timetable-Class.ics");
 $config['Practical'] = array("unique_id" => "Timetable-Practical", "url" => "http://www.cs.ox.ac.uk/feeds/Timetable-Practical.ics");
@@ -33,6 +36,7 @@ foreach ($config as $type => $v) {
 
 		if (in_array($summary, $courses)) {
 			if ($type != 'Lecture') {
+				// Filter with the days and times of your groups
 				$dweek = date("l", strtotime($dtstart['year'] . "-" . $dtstart['month'] . "-" . $dtstart['day']));
 				if (!($tutorials[$type][$summary]['day'] == $dweek && $tutorials[$type][$summary]['time'] == $dtstart['hour'])) {
 					$vevent -> setProperty("SUMMARY", $summary . " (" . $type . ")");
