@@ -35,14 +35,8 @@ foreach ($config as $type => $v) {
 		$summary = $vevent -> getProperty("SUMMARY");
 
 		if (in_array($summary, $courses)) {
-			if ($type != 'Lecture') {
-				// Filter with the days and times of your groups
-				$dweek = date("l", strtotime($dtstart['year'] . "-" . $dtstart['month'] . "-" . $dtstart['day']));
-				if (!($tutorials[$type][$summary]['day'] == $dweek && $tutorials[$type][$summary]['time'] == $dtstart['hour'])) {
-					$vevent -> setProperty("SUMMARY", $summary . " (" . $type . ")");
-					$vcalendarAll -> setComponent($vevent);
-				}
-			} else {
+			$dweek = date("l", strtotime($dtstart['year'] . "-" . $dtstart['month'] . "-" . $dtstart['day']));
+			if ($type == 'Lecture' || ($type != 'Lecture' && $tutorials[$type][$summary]['day'] == $dweek && $tutorials[$type][$summary]['time'] == $dtstart['hour'])) {
 				$vevent -> setProperty("SUMMARY", $summary . " (" . $type . ")");
 				$vcalendarAll -> setComponent($vevent);
 			}
